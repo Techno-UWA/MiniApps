@@ -1,3 +1,5 @@
+(Started as a test of the Windsurf IDE: https://codeium.com/windsurf)
+
 # Mini-Apps Hub
 
 A centralized platform for accessing and managing single-purpose mini-applications built with Next.js, TypeScript, and Supabase.

@@ -1,5 +1,6 @@
 import { CalendarIcon, ChartPieIcon, DocumentDuplicateIcon, FolderIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
+import React from 'react';
 
 const apps = [
   {
