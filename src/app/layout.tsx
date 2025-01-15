@@ -22,8 +22,8 @@ export default function RootLayout({
       <body className={`${inter.className} h-full`}>
         <div className="min-h-full fade-in">
           <Navigation />
-          <main>
-            <div className="mx-auto max-w-7xl py-8 px-8 sm:px-10 lg:px-16">
+          <main className="container-padding">
+            <div className="mx-auto max-w-5xl py-8 px-6 sm:px-12 lg:px-24">
               {children}
             </div>
           </main>

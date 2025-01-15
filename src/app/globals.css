@@ -56,6 +56,23 @@ p {
   padding: 0 1.5rem;
 }
 
+/* Container Padding */
+.container-padding {
+  padding: 2rem 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .container-padding {
+    padding: 2rem 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-padding {
+    padding: 2rem 4rem;
+  }
+}
+
 /* Navigation */
 .navbar {
   background: rgba(255, 255, 255, 0.8);
@@ -160,4 +177,56 @@ p {
 
 .fade-in {
   animation: fadeIn 0.5s ease forwards;
+}
+
+/* Mini Apps */
+.mini-app-card {
+  @apply relative block overflow-hidden rounded-xl bg-white p-5 shadow-md transition-all duration-300;
+}
+
+.mini-app-card:hover {
+  @apply shadow-lg -translate-y-1;
+}
+
+.mini-app-icon {
+  @apply inline-flex rounded-lg p-2 text-white shadow-md;
+  width: 32px;
+  height: 32px;
+}
+
+.mini-app-icon svg {
+  @apply w-4 h-4;
+}
+
+/* Settings */
+.settings-section {
+  @apply overflow-hidden rounded-xl bg-white shadow-md p-5 space-y-4;
+}
+
+.settings-header {
+  @apply flex items-center space-x-2;
+}
+
+.settings-icon {
+  @apply w-4 h-4 text-indigo-600;
+}
+
+.settings-title {
+  @apply text-lg font-semibold text-gray-900;
+}
+
+.settings-item {
+  @apply flex items-center justify-between space-x-4 py-2;
+}
+
+.settings-content {
+  @apply flex-1 min-w-0;
+}
+
+.settings-label {
+  @apply text-sm font-medium text-gray-900;
+}
+
+.settings-description {
+  @apply mt-1 text-sm text-gray-500;
 }
