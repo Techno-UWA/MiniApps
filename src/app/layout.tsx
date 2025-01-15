@@ -18,16 +18,26 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="h-full bg-gray-50">
+    <html lang="en" className="h-full">
       <body className={`${inter.className} h-full`}>
-        <div className="min-h-full">
+        <div className="min-h-full fade-in">
           <Navigation />
           <main>
             <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
               {children}
             </div>
           </main>
-          <Toaster position="bottom-right" />
+          <Toaster 
+            position="bottom-right" 
+            toastOptions={{
+              style: {
+                background: '#333',
+                color: '#fff',
+                borderRadius: '0.5rem',
+              },
+              duration: 4000,
+            }}
+          />
         </div>
       </body>
     </html>
