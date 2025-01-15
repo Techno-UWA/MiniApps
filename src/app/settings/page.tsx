@@ -72,7 +72,9 @@ export default function Settings() {
               className="settings-section"
             >
               <div className="settings-header">
-                <section.icon className="settings-icon" aria-hidden="true" />
+                <div className="settings-icon text-indigo-600">
+                  <section.icon aria-hidden="true" />
+                </div>
                 <h2 className="settings-title">{section.name}</h2>
               </div>
               <div className="space-y-4">

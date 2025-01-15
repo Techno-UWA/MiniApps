@@ -263,13 +263,13 @@ p {
 }
 
 .mini-app-icon {
-  @apply inline-flex rounded-lg p-2 text-white shadow-md;
-  width: 32px;
-  height: 32px;
+  @apply inline-flex rounded-lg p-2.5 text-white shadow-md;
+  width: 44px;
+  height: 44px;
 }
 
 .mini-app-icon svg {
-  @apply w-4 h-4;
+  @apply w-6 h-6;
 }
 
 /* Settings */
@@ -278,11 +278,14 @@ p {
 }
 
 .settings-header {
-  @apply flex items-center space-x-2;
+  @apply flex items-center gap-2.5;
 }
 
 .settings-icon {
-  @apply w-4 h-4 text-indigo-600;
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  min-height: 28px !important;
 }
 
 .settings-title {
