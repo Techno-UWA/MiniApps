@@ -8,73 +8,63 @@ const apps = [
     description: 'Organize and track your daily tasks efficiently',
     href: '/mini-apps/task-manager',
     icon: FolderIcon,
-    color: 'bg-indigo-500',
+    gradient: 'from-indigo-500 to-blue-600',
   },
   {
     name: 'Notes',
     description: 'Create and manage your notes with AI assistance',
     href: '/mini-apps/notes',
     icon: DocumentDuplicateIcon,
-    color: 'bg-yellow-500',
+    gradient: 'from-amber-500 to-orange-600',
   },
   {
     name: 'Calendar',
     description: 'Schedule and manage your appointments',
     href: '/mini-apps/calendar',
     icon: CalendarIcon,
-    color: 'bg-green-500',
+    gradient: 'from-emerald-500 to-teal-600',
   },
   {
     name: 'Analytics',
     description: 'Track and visualize your productivity metrics',
     href: '/mini-apps/analytics',
     icon: ChartPieIcon,
-    color: 'bg-purple-500',
+    gradient: 'from-purple-500 to-pink-600',
   },
 ]
 
 export default function MiniApps() {
   return (
-    <div>
+    <div className="fade-in">
       <div className="mx-auto max-w-7xl">
-        <h2 className="text-2xl font-bold tracking-tight text-gray-900">Mini Applications</h2>
-        <p className="mt-2 text-sm text-gray-600">
+        <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-indigo-500 to-purple-600 bg-clip-text text-transparent">
+          Mini Applications
+        </h1>
+        <p className="mt-3 text-lg text-gray-600">
           Select a mini-app to get started. Each app is designed to help you with specific tasks.
         </p>
 
-        <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-2">
           {apps.map((app) => {
             const Icon = app.icon
             return (
               <Link
                 key={app.name}
                 href={app.href}
-                className="group relative rounded-lg border border-gray-200 p-6 hover:border-indigo-500 hover:ring-1 hover:ring-indigo-500"
+                className="group relative block overflow-hidden rounded-2xl bg-white p-8 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
               >
-                <div>
-                  <span
-                    className={`inline-flex rounded-lg p-3 ${app.color} ring-4 ring-white`}
-                  >
-                    <Icon className="h-6 w-6 text-white" aria-hidden="true" />
-                  </span>
-                </div>
-                <div className="mt-4">
-                  <h3 className="text-lg font-medium">
-                    <span className="absolute inset-0" aria-hidden="true" />
+                <div className="relative z-10">
+                  <div className={`inline-flex rounded-xl bg-gradient-to-r ${app.gradient} p-3 text-white shadow-lg`}>
+                    <Icon className="h-6 w-6" aria-hidden="true" />
+                  </div>
+                  <h3 className="mt-6 text-xl font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors">
                     {app.name}
                   </h3>
-                  <p className="mt-2 text-sm text-gray-500">
+                  <p className="mt-2 text-gray-500">
                     {app.description}
                   </p>
                 </div>
-                <span
-                  className="pointer-events-none absolute right-6 top-6 text-gray-300 group-hover:text-indigo-500"
-                  aria-hidden="true"
-                >
-                  <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M20 4h1a1 1 0 00-1-1v1zm-1 12a1 1 0 102 0h-2zM8 3a1 1 0 000 2V3zM3.293 19.293a1 1 0 101.414 1.414l-1.414-1.414zM19 4v12h2V4h-2zm1-1H8v2h12V3zm-.707.293l-16 16 1.414 1.414 16-16-1.414-1.414z" />
-                  </svg>
-                </span>
+                <div className="absolute -right-12 -top-12 h-48 w-48 rounded-full bg-gradient-to-r from-indigo-100 to-purple-100 blur-3xl transition-all duration-500 group-hover:scale-150"></div>
               </Link>
             )
           })}

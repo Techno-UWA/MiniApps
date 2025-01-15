@@ -23,7 +23,7 @@ export default function RootLayout({
         <div className="min-h-full fade-in">
           <Navigation />
           <main>
-            <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-7xl py-8 px-8 sm:px-10 lg:px-16">
               {children}
             </div>
           </main>
