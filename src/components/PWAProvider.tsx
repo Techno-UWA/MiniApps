@@ -4,50 +4,76 @@ import { useEffect } from 'react';
 
 export default function PWAProvider() {
   useEffect(() => {
-    console.log('PWAProvider mounted');
-    
-    if (typeof window !== 'undefined') {
-      console.log('Window is defined');
-      
-      if ('serviceWorker' in navigator) {
-        console.log('Service Worker is supported');
+    const registerServiceWorker = async () => {
+      try {
+        console.log('Starting service worker registration...');
         
-        window.addEventListener('load', async () => {
-          try {
-            const registration = await navigator.serviceWorker.register('/sw.js');
-            console.log('Service Worker registration successful:', registration);
+        // Check if service workers are supported
+        if (!('serviceWorker' in navigator)) {
+          throw new Error('Service workers are not supported');
+        }
 
-            // Listen for updates
-            registration.addEventListener('updatefound', () => {
-              const newWorker = registration.installing;
-              console.log('Service Worker update found:', newWorker?.state);
-            });
+        // Check if we're in a secure context (localhost or HTTPS)
+        if (!window.isSecureContext) {
+          throw new Error('Page must be served over HTTPS or localhost');
+        }
 
-            // Listen for controller change
-            navigator.serviceWorker.addEventListener('controllerchange', () => {
-              console.log('Service Worker controller changed');
-            });
+        // Get all registered service workers
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        console.log('Existing registrations:', registrations.length);
 
-            // Listen for messages from the Service Worker
-            navigator.serviceWorker.addEventListener('message', (event) => {
-              console.log('Message from Service Worker:', event.data);
-            });
+        // Unregister any existing service workers
+        await Promise.all(registrations.map(registration => registration.unregister()));
+        console.log('Unregistered existing service workers');
 
-          } catch (error) {
-            console.error('Service Worker registration failed:', error);
-          }
+        // Register the new service worker
+        const registration = await navigator.serviceWorker.register('/sw.js', {
+          scope: '/',
+          type: 'classic'
         });
-      } else {
-        console.log('Service Worker is not supported');
-      }
 
-      // Add beforeinstallprompt event listener
-      window.addEventListener('beforeinstallprompt', (event) => {
-        console.log('beforeinstallprompt event fired');
-        // Optionally prevent Chrome 67 and earlier from automatically showing the prompt
-        event.preventDefault();
-      });
+        console.log('Service Worker registered successfully:', {
+          scope: registration.scope,
+          state: registration.active?.state || 'no active worker'
+        });
+
+        // Wait for the service worker to be activated
+        if (registration.installing) {
+          console.log('Service Worker installing...');
+          registration.installing.addEventListener('statechange', () => {
+            console.log('Service Worker state changed:', registration.installing?.state);
+          });
+        }
+
+        if (registration.waiting) {
+          console.log('Service Worker waiting...');
+        }
+
+        if (registration.active) {
+          console.log('Service Worker active!');
+        }
+
+        // Force activation if needed
+        if (registration.waiting) {
+          registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+        }
+
+      } catch (error) {
+        console.error('Service Worker registration failed:', error);
+      }
+    };
+
+    // Register service worker when the window loads
+    if (typeof window !== 'undefined') {
+      window.addEventListener('load', registerServiceWorker);
     }
+
+    // Cleanup
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('load', registerServiceWorker);
+      }
+    };
   }, []);
 
   return null;
