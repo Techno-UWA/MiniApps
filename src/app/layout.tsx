@@ -3,13 +3,21 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { Toaster } from 'react-hot-toast'
 import Navigation from '@/components/Navigation'
+import PWAProvider from '@/components/PWAProvider'
 import React from 'react';
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Mini-Apps Hub',
-  description: 'A centralized platform for accessing single-purpose mini-applications',
+  title: 'Windsurf Project',
+  description: 'Your personal windsurf companion',
+  manifest: '/manifest.json',
+  themeColor: '#000000',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Windsurf Project',
+  },
 }
 
 export default function RootLayout({
@@ -20,6 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full">
       <body className={`${inter.className} h-full`}>
+        <PWAProvider />
         <div className="min-h-full fade-in">
           <Navigation />
           <main className="container-padding">
