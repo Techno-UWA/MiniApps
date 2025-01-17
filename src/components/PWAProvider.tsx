@@ -1,8 +1,11 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function PWAProvider() {
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [isInstallable, setIsInstallable] = useState(false);
+
   useEffect(() => {
     const registerServiceWorker = async () => {
       try {
@@ -63,18 +66,57 @@ export default function PWAProvider() {
       }
     };
 
+    // Handle the install prompt
+    const handleBeforeInstallPrompt = (e: Event) => {
+      // Prevent Chrome 67 and earlier from automatically showing the prompt
+      e.preventDefault();
+      // Stash the event so it can be triggered later
+      setDeferredPrompt(e);
+      // Show the install button
+      setIsInstallable(true);
+    };
+
     // Register service worker when the window loads
     if (typeof window !== 'undefined') {
       window.addEventListener('load', registerServiceWorker);
+      window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt as any);
     }
 
     // Cleanup
     return () => {
       if (typeof window !== 'undefined') {
         window.removeEventListener('load', registerServiceWorker);
+        window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt as any);
       }
     };
   }, []);
 
-  return null;
+  const handleInstallClick = async () => {
+    if (!deferredPrompt) return;
+
+    try {
+      // Show the install prompt
+      const result = await deferredPrompt.prompt();
+      console.log('Install prompt result:', result);
+      
+      // Reset the deferred prompt -- it can only be used once
+      setDeferredPrompt(null);
+      setIsInstallable(false);
+    } catch (err) {
+      console.error('Error installing PWA:', err);
+    }
+  };
+
+  if (!isInstallable) return null;
+
+  return (
+    <div className="fixed bottom-4 right-4 z-50">
+      <button
+        onClick={handleInstallClick}
+        className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-lg transition-colors duration-200"
+      >
+        Install App
+      </button>
+    </div>
+  );
 }
