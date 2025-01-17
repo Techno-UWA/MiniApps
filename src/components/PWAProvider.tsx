@@ -1,122 +1,149 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, createContext, useContext } from 'react';
 
-export default function PWAProvider() {
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-  const [isInstallable, setIsInstallable] = useState(false);
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+}
+
+type PWAContextType = {
+  deferredPrompt: BeforeInstallPromptEvent | null;
+  isInstalled: boolean;
+  onInstall: () => void;
+};
+
+const PWAContext = createContext<PWAContextType>({
+  deferredPrompt: null,
+  isInstalled: false,
+  onInstall: () => {},
+});
+
+export const usePWA = () => useContext(PWAContext);
+
+export default function PWAProvider({ children }: { children: React.ReactNode }) {
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [isInstalled, setIsInstalled] = useState(false);
 
   useEffect(() => {
+    console.log('PWAProvider mounted');
+
     const registerServiceWorker = async () => {
+      if (typeof window === 'undefined') return;
+
       try {
         console.log('Starting service worker registration...');
         
-        // Check if service workers are supported
         if (!('serviceWorker' in navigator)) {
-          throw new Error('Service workers are not supported');
+          console.log('Service workers are not supported');
+          return;
         }
 
-        // Check if we're in a secure context (localhost or HTTPS)
-        if (!window.isSecureContext) {
-          throw new Error('Page must be served over HTTPS or localhost');
-        }
-
-        // Get all registered service workers
-        const registrations = await navigator.serviceWorker.getRegistrations();
-        console.log('Existing registrations:', registrations.length);
-
-        // Unregister any existing service workers
-        await Promise.all(registrations.map(registration => registration.unregister()));
-        console.log('Unregistered existing service workers');
-
-        // Register the new service worker
         const registration = await navigator.serviceWorker.register('/sw.js', {
-          scope: '/',
-          type: 'classic'
+          scope: '/'
         });
-
-        console.log('Service Worker registered successfully:', {
-          scope: registration.scope,
-          state: registration.active?.state || 'no active worker'
-        });
-
-        // Wait for the service worker to be activated
-        if (registration.installing) {
-          console.log('Service Worker installing...');
-          registration.installing.addEventListener('statechange', () => {
-            console.log('Service Worker state changed:', registration.installing?.state);
-          });
-        }
-
-        if (registration.waiting) {
-          console.log('Service Worker waiting...');
-        }
-
-        if (registration.active) {
-          console.log('Service Worker active!');
-        }
-
-        // Force activation if needed
-        if (registration.waiting) {
-          registration.waiting.postMessage({ type: 'SKIP_WAITING' });
-        }
-
+        console.log('Service Worker registered:', registration.scope);
       } catch (error) {
         console.error('Service Worker registration failed:', error);
       }
     };
 
-    // Handle the install prompt
+    const checkInstallState = () => {
+      if (typeof window === 'undefined') return;
+
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+        || (window.navigator as any).standalone
+        || document.referrer.includes('android-app://');
+      
+      console.log('Checking install state:', { isStandalone });
+      setIsInstalled(isStandalone);
+    };
+
     const handleBeforeInstallPrompt = (e: Event) => {
       // Prevent Chrome 67 and earlier from automatically showing the prompt
       e.preventDefault();
-      // Stash the event so it can be triggered later
-      setDeferredPrompt(e);
-      // Show the install button
-      setIsInstallable(true);
+      // Stash the event so it can be triggered later.
+      const promptEvent = e as BeforeInstallPromptEvent;
+      console.log('beforeinstallprompt event fired', promptEvent);
+      setDeferredPrompt(promptEvent);
     };
 
-    // Register service worker when the window loads
-    if (typeof window !== 'undefined') {
-      window.addEventListener('load', registerServiceWorker);
-      window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt as any);
-    }
+    const handleAppInstalled = () => {
+      console.log('App was installed');
+      setDeferredPrompt(null);
+      setIsInstalled(true);
+    };
 
-    // Cleanup
+    // Check initial state
+    checkInstallState();
+
+    // Register service worker
+    registerServiceWorker();
+
+    // Add event listeners
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    window.addEventListener('appinstalled', handleAppInstalled);
+
+    // Monitor installation status changes
+    const mediaQuery = window.matchMedia('(display-mode: standalone)');
+    const handleDisplayModeChange = (e: MediaQueryListEvent) => {
+      console.log('Display mode changed:', e.matches ? 'standalone' : 'browser');
+      setIsInstalled(e.matches);
+    };
+    mediaQuery.addEventListener('change', handleDisplayModeChange);
+
     return () => {
-      if (typeof window !== 'undefined') {
-        window.removeEventListener('load', registerServiceWorker);
-        window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt as any);
-      }
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener('appinstalled', handleAppInstalled);
+      mediaQuery.removeEventListener('change', handleDisplayModeChange);
     };
   }, []);
 
-  const handleInstallClick = async () => {
-    if (!deferredPrompt) return;
+  const handleInstall = async () => {
+    console.log('Attempting to install with deferredPrompt:', deferredPrompt);
+    
+    if (!deferredPrompt) {
+      console.log('No installation prompt available');
+      return;
+    }
 
     try {
       // Show the install prompt
-      const result = await deferredPrompt.prompt();
-      console.log('Install prompt result:', result);
+      await deferredPrompt.prompt();
+      console.log('Install prompt shown');
       
-      // Reset the deferred prompt -- it can only be used once
+      // Wait for the user to respond to the prompt
+      const choiceResult = await deferredPrompt.userChoice;
+      console.log('User choice:', choiceResult.outcome);
+      
+      if (choiceResult.outcome === 'accepted') {
+        console.log('User accepted the installation');
+        setIsInstalled(true);
+      } else {
+        console.log('User dismissed the installation');
+      }
+      
+      // Clear the saved prompt since it can't be used again
       setDeferredPrompt(null);
-      setIsInstallable(false);
     } catch (err) {
-      console.error('Error installing PWA:', err);
+      console.error('Error during installation:', err);
     }
   };
 
-  if (!isInstallable) return null;
+  console.log('Render state:', { 
+    hasDeferredPrompt: !!deferredPrompt, 
+    isInstalled 
+  });
 
   return (
-    <div className="fixed bottom-4 right-4 z-50">
-      <button
-        onClick={handleInstallClick}
-        className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-lg transition-colors duration-200"
-      >
-        Install App
-      </button>
-    </div>
+    <PWAContext.Provider 
+      value={{
+        deferredPrompt,
+        isInstalled,
+        onInstall: handleInstall,
+      }}
+    >
+      {children}
+    </PWAContext.Provider>
   );
 }

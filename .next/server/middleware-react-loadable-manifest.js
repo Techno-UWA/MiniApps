@@ -1,1 +1,1 @@
-self.__REACT_LOADABLE_MANIFEST="{}";
+self.__REACT_LOADABLE_MANIFEST='{"components/HomeContent.tsx -> @/components/InstallPrompt":{"id":1634,"files":["static/chunks/ee560e2c.b877d9a13da38f1d.js","static/chunks/752.1849a8777950c544.js"]}}';
