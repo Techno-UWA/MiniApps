@@ -33,17 +33,14 @@ export default function InstallPWA() {
     onInstall();
   };
 
-  if (!isInstallable) {
-    console.log('Install button hidden - not installable');
-    return null;
-  }
-
+  // Server-side fallback for install button
   return (
     <button
       onClick={handleInstallClick}
       className="fixed bottom-4 right-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded shadow-lg transition-colors"
+      disabled={!isInstallable} // Disable button if not installable
     >
-      Install App
+      {isInstallable ? 'Install App' : 'Not Installable'}
     </button>
   );
 }

@@ -48,13 +48,20 @@ export default function RootLayout({
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="application-name" content="Windsurf Project" />
       </head>
-      <body className={`${inter.className} h-full`}>
+      <body suppressHydrationWarning className={`${inter.className} h-full`}>
         <PWAProvider>
           <div className="min-h-full fade-in">
             <Navigation />
             <main>
               <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 {children}
+                {children === null && (
+                  <div className="flex justify-center mt-20">
+                    <button className="install-button text-2xl py-5 px-10 rounded-lg bg-blue-500 hover:bg-blue-700 text-white">
+                      Install PWA
+                    </button>
+                  </div>
+                )}
               </div>
             </main>
             <InstallPWA />
