@@ -16,16 +16,16 @@ export default function InstallPWA() {
         isInstallPromptAvailable,
         isInstalled,
         deferredPrompt: !!deferredPrompt,
-        projectName: 'MiniApps', // Added project name for clarity
+        projectName: 'MiniApps',
       });
       setIsInstallable(isInstallPromptAvailable && !isStandalone && !isInstalled);
     };
 
+    // Check installable only once on component mount
     checkInstallable();
-    
-    // Check again when deferredPrompt or isInstalled changes
-    const interval = setInterval(checkInstallable, 1000);
-    return () => clearInterval(interval);
+
+    // Cleanup function not needed anymore
+    return () => {};
   }, [deferredPrompt, isInstalled]);
 
   const handleInstallClick = (e: React.MouseEvent) => {
