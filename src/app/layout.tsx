@@ -17,13 +17,13 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: 'Windsurf Project',
-  description: 'Your personal windsurf companion',
+  title: 'MiniApps',
+  description: 'Your personal companion',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
-    title: 'Windsurf',
+    title: 'MiniApps',
   },
   icons: {
     icon: '/icons/icon-512x512.png',
@@ -44,9 +44,9 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-        <meta name="apple-mobile-web-app-title" content="Windsurf" />
+        <meta name="apple-mobile-web-app-title" content="MiniApps" />
         <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="application-name" content="Windsurf Project" />
+        <meta name="application-name" content="MiniApps" />
       </head>
       <body suppressHydrationWarning className={`${inter.className} h-full`}>
         <PWAProvider>

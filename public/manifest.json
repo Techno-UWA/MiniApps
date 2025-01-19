@@ -1,8 +1,8 @@
 {
-  "id": "windsurf-project",
-  "name": "Windsurf Project",
-  "short_name": "Windsurf",
-  "description": "Your personal windsurf companion",
+  "id": "miniapps-project",
+  "name": "MiniApps",
+  "short_name": "MiniApps",
+  "description": "Your personal mini apps companion",
   "start_url": "/?source=pwa",
   "scope": "/",
   "display": "standalone",
@@ -29,14 +29,14 @@
       "sizes": "1280x800",
       "type": "image/png",
       "form_factor": "wide",
-      "label": "Windsurf Project Desktop View"
+      "label": "MiniApps Desktop View"
     },
     {
       "src": "/screenshots/mobile.png",
       "sizes": "390x844",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "Windsurf Project Mobile View"
+      "label": "MiniApps Mobile View"
     }
   ],
   "categories": ["utilities", "productivity"],
@@ -61,7 +61,7 @@
   ],
   "protocol_handlers": [
     {
-      "protocol": "web+windsurf",
+      "protocol": "web+miniapps",
       "url": "/?protocol=%s"
     }
   ],

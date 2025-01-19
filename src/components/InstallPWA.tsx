@@ -15,7 +15,8 @@ export default function InstallPWA() {
         isStandalone,
         isInstallPromptAvailable,
         isInstalled,
-        deferredPrompt: !!deferredPrompt
+        deferredPrompt: !!deferredPrompt,
+        projectName: 'MiniApps', // Added project name for clarity
       });
       setIsInstallable(isInstallPromptAvailable && !isStandalone && !isInstalled);
     };
