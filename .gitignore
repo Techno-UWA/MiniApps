@@ -4,6 +4,7 @@ node_modules/
 # Build output
 dist/
 build/
+.next
 
 # Environment variables
 .env
@@ -24,3 +25,23 @@ Thumbs.db
 .idea/
 *.sublime-workspace
 *.sublime-project
+
+# idx
+.idx
+
+# Ignore branch changing files
+install_nvm.sh
+nvm.sh
+
+# Dependency lock files
+package-lock.json
+
+# Ignore service worker and fallback files
+/public/sw.js
+/public/fallback*
+/public/workbox-*
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
