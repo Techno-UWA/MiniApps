@@ -33,8 +33,6 @@ Thumbs.db
 install_nvm.sh
 nvm.sh
 
-# Dependency lock files
-
 # Ignore service worker and fallback files
 /public/sw.js
 /public/fallback*
