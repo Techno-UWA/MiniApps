@@ -34,7 +34,6 @@ install_nvm.sh
 nvm.sh
 
 # Dependency lock files
-package-lock.json
 
 # Ignore service worker and fallback files
 /public/sw.js
