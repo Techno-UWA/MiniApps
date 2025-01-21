@@ -122,4 +122,4 @@ The application is configured for deployment on Vercel:
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the ___ License - see the LICENSE file for details.
