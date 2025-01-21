@@ -158,13 +158,19 @@ p {
 /* Install Button */
 .install-button {
   font-size: 24px;
-  padding: 20px 40px;
+  padding: 80px 80px;
   border: none;
   border-radius: 8px;
   background-color: #007bff;
   color: white;
   cursor: pointer;
   transition: background-color 0.3s, transform 0.2s;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width:50%;
+  margin: 0 auto;
 }
 
 .install-button:hover {

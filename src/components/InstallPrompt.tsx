@@ -29,7 +29,7 @@ export default function InstallPrompt() {
     if (isInstalled) return 'Successfully Installed!';
     if (isInstalling) return 'Installing...';
     if (!deferredPrompt) return 'Installation Not Available';
-    return 'Install Windsurf Project';
+    return 'Install MiniApps Project';
   };
 
   const getButtonIcon = () => {
@@ -43,9 +43,9 @@ export default function InstallPrompt() {
         onClick={deferredPrompt ? handleInstall : undefined}
         disabled={!deferredPrompt || isInstalling || isInstalled}
         className={`
-          flex items-center justify-center space-x-3 
+          install-button flex items-center justify-center space-x-3 
           w-full max-w-sm px-8 py-4 rounded-xl
-          text-lg font-semibold
+          text-9xl font-semibold
           transform transition-all duration-200
           ${isInstalled 
             ? 'bg-green-500 text-white cursor-default' 

@@ -1,5 +1,4 @@
 name = "MiniApps"
-type = "typescript"
-
-[env.production]
-node_version = "lts"
+main = "src/index.js"
+compatibility_date = "2025-01-21"
+node_compat = true
