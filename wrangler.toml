@@ -1,0 +1,5 @@
+name = "MiniApps"
+type = "typescript"
+
+[env.production]
+node_version = "lts"
