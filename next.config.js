@@ -150,6 +150,7 @@ const withPWA = require('next-pwa')({
 });
 
 const nextConfig = {
+  distDir: '.next', // Specify the output directory
   reactStrictMode: true,
 }
 
