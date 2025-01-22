@@ -1,5 +1,3 @@
-name = "MiniApps"
-type = "typescript"
-
-[env.production]
-node_version = "lts"
+name = "mini-apps"
+compatibility_date = "2025-01-21"
+pages_build_output_dir = ".next"

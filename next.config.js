@@ -150,7 +150,25 @@ const withPWA = require('next-pwa')({
 });
 
 const nextConfig = {
+  distDir: '.next', // Specify the output directory
   reactStrictMode: true,
-}
+  webpack: (config, { isServer }) => {
+    // Add cache configuration
+    config.cache = {
+      type: 'filesystem',
+      maxMemoryGenerations: 0,
+    };
+
+    // Only analyze the client build
+    if (!isServer) {
+      const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+      config.plugins.push(new BundleAnalyzerPlugin({
+        analyzerMode: 'disabled', // You can also use 'static' or 'disabled'
+        openAnalyzer: false, // Automatically open the report in the browser
+      }));
+    }
+    return config;
+  },
+};
 
 module.exports = withPWA(nextConfig);
