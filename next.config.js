@@ -155,3 +155,23 @@ const nextConfig = {
 }
 
 module.exports = withPWA(nextConfig);
+
+
+
+
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+
+module.exports = {
+  distDir: '.next', // Specify the output directory
+  reactStrictMode: true,
+  webpack: (config, { isServer }) => {
+    // Only analyze the client build
+    if (!isServer) {
+      config.plugins.push(new BundleAnalyzerPlugin({
+        analyzerMode: 'server', // You can also use 'static' or 'disabled'
+        openAnalyzer: true, // Automatically open the report in the browser
+      }));
+    }
+    return config;
+  },
+};
