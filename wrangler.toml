@@ -1,4 +1,4 @@
-name = "MiniApps"
+name = "mini-apps"
 main = "src/index.js"
 compatibility_date = "2025-01-21"
 node_compat = true
