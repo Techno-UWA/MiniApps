@@ -1,12 +1,22 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FiDownload, FiCheck } from 'react-icons/fi';
 import { usePWA } from '@/components/PWAProvider';
 
 export default function InstallPrompt() {
   const { deferredPrompt, isInstalled, onInstall } = usePWA();
   const [isInstalling, setIsInstalling] = useState(false);
+  const [isiOSSafari, setIsiOSSafari] = useState(false);
+
+  useEffect(() => {
+    const userAgent = navigator.userAgent.toLowerCase();
+    const isIos = /iphone|ipad|ipod/.test(userAgent);
+    const isStandalone = (navigator as any).standalone === true; 
+    if (isIos && !isStandalone) {
+      setIsiOSSafari(true);
+    }
+  }, []);
 
   const handleInstall = async () => {
     if (!deferredPrompt) return;
@@ -39,27 +49,33 @@ export default function InstallPrompt() {
 
   return (
     <div className="flex flex-col items-center space-y-4">
-      <button
-        onClick={deferredPrompt ? handleInstall : undefined}
-        disabled={!deferredPrompt || isInstalling || isInstalled}
-        className={`
-          install-button flex items-center justify-center space-x-3 
-          w-full max-w-sm px-8 py-4 rounded-xl
-          text-9xl font-semibold
-          transform transition-all duration-200
-          ${isInstalled 
-            ? 'bg-green-500 text-white cursor-default' 
-            : deferredPrompt 
-              ? 'bg-indigo-600 text-white hover:bg-indigo-500 active:scale-95'
-              : 'bg-gray-200 text-gray-500 cursor-not-allowed'
-          }
-        `}
-      >
-        {getButtonIcon()}
-        <span>{getButtonText()}</span>
-      </button>
+      {isiOSSafari ? (
+        <div className="bg-gray-200 p-4 rounded text-center">
+          <p className="text-gray-700">Tap the "Share" icon, then "Add to Home Screen" to install.</p>
+        </div>
+      ) : (
+        <button
+          onClick={deferredPrompt ? handleInstall : undefined}
+          disabled={!deferredPrompt || isInstalling || isInstalled}
+          className={`
+            install-button flex items-center justify-center space-x-3 
+            w-full max-w-sm px-8 py-4 rounded-xl
+            text-9xl font-semibold
+            transform transition-all duration-200
+            ${isInstalled 
+              ? 'bg-green-500 text-white cursor-default' 
+              : deferredPrompt 
+                ? 'bg-indigo-600 text-white hover:bg-indigo-500 active:scale-95'
+                : 'bg-gray-200 text-gray-500 cursor-not-allowed'
+            }
+          `}
+        >
+          {getButtonIcon()}
+          <span>{getButtonText()}</span>
+        </button>
+      )}
 
-      {!isInstalled && (
+      {!isInstalled && !isiOSSafari && (
         <p className="text-gray-500 text-sm">
           {deferredPrompt 
             ? 'Install now for the best experience!' 
