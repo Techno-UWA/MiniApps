@@ -42,3 +42,6 @@ nvm.sh
 *.tmp
 *.temp
 *.swp
+
+# out
+out

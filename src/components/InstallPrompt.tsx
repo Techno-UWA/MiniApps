@@ -50,8 +50,11 @@ export default function InstallPrompt() {
   return (
     <div className="flex flex-col items-center space-y-4">
       {isiOSSafari ? (
-        <div className="bg-gray-200 p-4 rounded text-center">
-          <p className="text-gray-700">Tap the "Share" icon, then "Add to Home Screen" to install.</p>
+        <div className="bg-yellow-100 p-8 rounded-lg shadow-md w-full max-w-md mx-auto text-center">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Install on iPhone</h2>
+          <p className="text-gray-700 text-lg">
+            Tap the "Share" icon, then "Add to Home Screen" to install.
+          </p>
         </div>
       ) : (
         <button
