@@ -9,7 +9,7 @@ import clsx from 'clsx'
 
 const navigation = [
   { name: 'Dashboard', href: '/' },
-  { name: 'Mini-Apps', href: '/mini-apps' },
+  { name: 'MiniApps', href: '/mini-apps' },
   { name: 'Settings', href: '/settings' },
 ]
 
@@ -19,7 +19,7 @@ export default function Navigation() {
   return (
     <nav className="navbar">
       <div className="container">
-        <h1 className="logo">Mini-Apps Hub</h1>
+        <h1 className="logo">MiniApps</h1>
         <ul className="nav-links">
           {navigation.map((item) => (
             <li key={item.name}>
